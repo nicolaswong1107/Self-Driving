@@ -7,6 +7,12 @@
 //
 
 import UIKit
+import MapKit
+import GoogleMaps
+
+let appDelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+
+var userVal:NSDictionary?
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,10 +21,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        //
+        GMSServices.provideAPIKey("AIzaSyDNZzHlvj0WjrQpcrtR0Zw9MCEeoO_xnQM")
+        //load user content
+        userVal = UserDefaults.standard.value(forKey: "parseJSON") as! NSDictionary?
+        
+        //if user once login, keep login
+        if userVal != nil{
+            let id = userVal!["id"] as? String
+            if id != nil{
+                login()
+            }
+        }
         return true
     }
 
+    func login(){
+        let storyboard = UIStoryboard(name: "main", bundle: nil)
+        let tabBarController = storyboard.instantiateViewController(withIdentifier: "tabBarController")
+        window?.rootViewController = tabBarController
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
